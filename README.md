@@ -28,7 +28,8 @@ Please check the code quality here - https://app.codacy.com/app/Evolvus/evolvus-
 
 
 ## Related Projects
-- [evolvus/evolvus-platform-server](https://github.com/Evolvus/evolvus-platform-server)
+- [jsonschema](https://www.npmjs.com/package/jsonschema)
+- [lodash](https://www.npmjs.com/package/lodash)
 
 ## Contributing
 Thank you very much for considering to contribute!
