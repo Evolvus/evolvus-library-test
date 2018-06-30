@@ -11,6 +11,17 @@
 $ npm install evolvus-library-test --save-dev
 ```
 
+`evolvus-library-test` can be run by the following command.
+
+```
+$ grunt
+```
+To see the debug output and check the results of the calls to the libraries, set the DEBUG environment variable to `evolvus*`
+
+```
+$ DEBUG=evolvus* grunt
+```
+
 ## Code Quality
 Please check the code quality here - https://app.codacy.com/app/Evolvus/evolvus-library-test/dashboard
 ## Usage
