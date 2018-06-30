@@ -1,18 +1,18 @@
-# What is evolvus-application ?
+# What is evolvus-library-test ?
 
-`evolvus-application` is a component that encapsulates Application management functionality across all Evolvus products.
+`evolvus-library-test` is a test suite to for dependent libraries. Evolvus components utilizes several npm packages. This package covers the test cases for the packages specific to what is used by Evolvus components. This helps identify any change that can break functionaty being currently used by Evolvus components.
 
 ## Installation
 
 ### Node.js
-`evolvus-application` is available on [npm](http://npmjs.org). To install it, type:
+`evolvus-library-test` is available on [npm](http://npmjs.org). To install it, type:
 
 ```bash
-$ npm install evolvus-application --save
+$ npm install evolvus-library-test --save-dev
 ```
 
 ## Code Quality
-Please check the code quality here - https://app.codacy.com/app/Evolvus/evolvus-application/dashboard
+Please check the code quality here - https://app.codacy.com/app/Evolvus/evolvus-library-test/dashboard
 ## Usage
 
 
