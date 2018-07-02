@@ -156,15 +156,13 @@ it("should fail validate on an Object with invalid boolean type", () => {
     .to.have.lengthOf(1);
 });
 
-it("should fail validate on an Object with null attribute", () => {
+it("should pass validate on an Object with null attribute type", () => {
   // The errors[stack] object gives the list of errors
   // enable debug to see complete result value
   var testObject = jsonSchemaTestData.invalidApplicationObject6;
   var result = validate(testObject, jsonSchemaTestData.applicationSchema);
-  debug("Error Message[0]: " + JSON.stringify(result.errors[0].stack));
   debug("result is: " + JSON.stringify(result));
-  expect(result.valid, "Must fail validation when attribute type is different")
-    .to.equal(false);
-  expect(result.errors, "Must have errors")
-    .to.have.lengthOf(1);
+  //  debug("Error Message[0]: " + JSON.stringify(result.errors[0].stack));
+  expect(result.valid, "Must not fail validation when attribute type is null")
+    .to.equal(true);
 });

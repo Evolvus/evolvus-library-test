@@ -39,7 +39,7 @@ module.exports.applicationSchema = {
       "format": "date-time"
     },
     "updatedDate": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "date-time"
     },
     "description": {
@@ -176,11 +176,11 @@ module.exports.invalidApplicationObject6 = {
   "applicationCode": "DOCKET",
   "applicationName": "Evolvus Audit Event Capture Service",
   "enabled": false,
-  "logo": "smiley.png",
+  "logo": "",
   "favicon": "favicon.png",
   "createdBy": "user1",
   "updatedBy": "",
   "createdDate": new Date()
     .toISOString(),
-  "updatedDate": "null"
+  "updatedDate": null
 };
