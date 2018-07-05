@@ -166,3 +166,14 @@ it("should pass validate on an Object with null attribute type", () => {
   expect(result.valid, "Must not fail validation when attribute type is null")
     .to.equal(true);
 });
+
+it("should not allow white space characters", () => {
+  // The errors[stack] object gives the list of errors
+  // enable debug to see complete result value
+  var testObject = jsonSchemaTestData.invalidApplicationObject7;
+  var result = validate(testObject, jsonSchemaTestData.applicationSchemaRegex);
+  debug("result is: " + JSON.stringify(result));
+  //  debug("Error Message[0]: " + JSON.stringify(result.errors[0].stack));
+  expect(result.valid, "Must fail validation when attribute type is null")
+    .to.equal(false);
+});

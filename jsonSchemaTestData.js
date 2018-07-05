@@ -184,3 +184,76 @@ module.exports.invalidApplicationObject6 = {
     .toISOString(),
   "updatedDate": null
 };
+
+module.exports.applicationSchemaRegex = {
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "applicationRegexModel",
+  "type": "object",
+  "properties": {
+    "tenantId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+    },
+    "applicationCode": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 20,
+      "pattern": "/^\S*$/m"
+    },
+    "applicationName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "logo": {
+      "type": "string"
+    },
+    "favicon": {
+      "type": "string"
+    },
+    "createdBy": {
+      "type": "string"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "createdDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedDate": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 255
+    }
+  },
+  // required just means that the object must have these fields. it does not mean
+  // that these fields must have values. The values can still be null.
+  // To prevent null values use minLength and other attributes
+  "required": ["tenantId", "applicationCode", "applicationName", "createdBy", "createdDate"]
+};
+
+// applicationCode with spaces
+module.exports.invalidApplicationObject7 = {
+  "tenantId": "IVL",
+  "applicationCode": "DO KET",
+  "applicationName": "Evolvus Audit Event Capture Service",
+  "enabled": false,
+  "logo": "smiley.png",
+  "favicon": "favicon.png",
+  "createdBy": "user1",
+  "updatedBy": "",
+  "createdDate": new Date()
+    .toISOString(),
+  "updatedDate": new Date()
+    .toISOString()
+};
