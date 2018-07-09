@@ -1,3 +1,8 @@
+/*
+ * The following jshint comment is needed to compile test cases
+ * which use expect(..).is..empty - expression
+ */
+/*jshint expr: true */
 const debug = require("debug")("evolvus-library-test:mongooseTest");
 const mongoose = require("mongoose");
 const chai = require("chai");
@@ -37,6 +42,15 @@ before((done) => {
     debug("ok got the connection");
     testData.deleteAll("IVL")
       .then((res) => {
+        return testData.save("IVL", testData.validObject2);
+      })
+      .then((res) => {
+        return testData.save("IVL", testData.validObject3);
+      })
+      .then((res) => {
+        return testData.save("IVL", testData.validObject4);
+      })
+      .then((res) => {
         done();
       });
   });
@@ -44,60 +58,104 @@ before((done) => {
 
 it("should save a valid object", (done) => {
   let testObject = testData.validObject1;
-
-  let result = testData.save("IVL", testObject);
-  expect(result)
-    .to.eventually.have.be.a('object')
-    .notify(done);
-});
-
-it("should update valid object", (done) => {
-  let wfEntity = testData.validObject2.wfEntity;
-  let wfEntityAction = testData.validObject2.wfEntityAction;
-
-  testData.save("IVL", testData.validObject2)
-    .then((testObject) => {
-      debug("result: " + JSON.stringify(testObject));
-      testObject.description = "Changed";
-      testData.update("IVL", {
-          "wfEntity": wfEntity,
-          "wfEntityAction": wfEntityAction
-        }, testObject)
-        .then((result) => {
-          debug("result: " + JSON.stringify(result));
-          expect(result)
-            .to.have.property("n")
-            .to.equal(1);
-          expect(result)
-            .to.have.property("nModified")
-            .to.equal(1);
-          done();
-        });
+  testData.save("IVL", testObject)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.a('object');
+      done();
     });
 });
 
+it("should update valid object", (done) => {
+  var testObject = testData.validObject2;
+  testObject.description = "Changed";
+  testData.update("IVL", {
+      "wfEntity": testObject.wfEntity,
+      "wfEntityAction": testObject.wfEntityAction
+    }, testObject)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.have.property("n")
+        .to.equal(1);
+      expect(result)
+        .to.have.property("nModified")
+        .to.equal(1);
+      done();
+    });
+});
 
-it("should update One valid object", (done) => {
-  let wfEntity = testData.validObject3.wfEntity;
-  let wfEntityAction = testData.validObject3.wfEntityAction;
+it("should fail update when filter is wrong", (done) => {
+  var testObject = testData.validObject2;
+  testObject.description = "Changed";
+  testObject.updatedBy = "SYSTEM";
+  testData.update("IVL", {
+      "wfEntity": "XYZ",
+      "wfEntityAction": testObject.wfEntityAction
+    }, testObject)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.have.property("n")
+        .to.equal(0);
+      expect(result)
+        .to.have.property("nModified")
+        .to.equal(0);
+      done();
+    });
+});
 
-  testData.save("IVL", testData.validObject3)
-    .then((testObject) => {
-      debug("result: " + JSON.stringify(testObject));
-      testObject.updatedBy = "SYSTEM";
-      testData.update("IVL", {
-          "wfEntity": wfEntity,
-          "wfEntityAction": wfEntityAction
-        }, testObject)
-        .then((result) => {
-          debug("result: " + JSON.stringify(result));
-          expect(result)
-            .to.have.property("n")
-            .to.equal(1);
-          expect(result)
-            .to.have.property("nModified")
-            .to.equal(1);
-          done();
-        });
+it("should update fail to update if the filter columns are invalid", (done) => {
+  var testObject = testData.validObject3;
+  testObject.description = "Changed";
+  testObject.updatedBy = "SYSTEM";
+  testData.update("IVL", {
+      "wfXYZ": "XYZ",
+      "wfEntityAction": testObject.wfEntityAction
+    }, testObject)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.have.property("n")
+        .to.equal(0);
+      expect(result)
+        .to.have.property("nModified")
+        .to.equal(0);
+      done();
+    });
+});
+
+it("should find one object on searching by valid tenant", (done) => {
+  testData.findOne("IVL", {})
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an("object")
+        .and.not.to.eql({});
+      done();
+    });
+});
+
+// returns null not empty object when not data is found
+it("should find null on searching by invalid valid tenant", (done) => {
+  testData.findOne("IVL1", {})
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.null;
+      done();
+    });
+});
+
+it("should find null on searching by invalid attribute", (done) => {
+  testData.findOne("IVL", {
+      "XWZ": "1"
+    })
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.null;
+      done();
     });
 });

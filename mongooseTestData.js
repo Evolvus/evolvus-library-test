@@ -51,12 +51,11 @@ module.exports.update = (tenantId, key, update) => {
 
 // updates only the first record
 module.exports.update = (tenantId, key, update) => {
-  let query = {
-    "tenantId": tenantId,
-    "wfEntity": key.wfEntity,
-    "wfEntityAction": key.wfEntityAction
-  };
-  return collection.updateOne(query, update);
+  let query = _.merge({
+    "tenantId": tenantId
+  }, key);
+  debug("update query: " + JSON.stringify(query));
+  return collection.update(query, update);
 };
 
 // Deletes all the entries of the collection.
@@ -69,6 +68,7 @@ module.exports.deleteAll = (tenantId) => {
 };
 
 module.exports.validObject1 = {
+  tenantId: "IVL",
   wfEntity: "USER",
   wfEntityAction: "CREATE",
   enabled: "true",
@@ -81,8 +81,23 @@ module.exports.validObject1 = {
 };
 
 module.exports.validObject2 = {
-  wfEntity: "USER",
-  wfEntityAction: "AMEND",
+  "tenantId": "IVL",
+  "wfEntity": "USER",
+  "wfEntityAction": "AMEND",
+  "enabled": "true",
+  "description": "",
+  "wfType": "AA",
+  "createdBy": "SYSTEM",
+  "updatedBy": "",
+  "createdDate": Date.now(),
+  "updatedDate": Date.now()
+};
+
+
+module.exports.validObject3 = {
+  tenantId: "IVL",
+  wfEntity: "ROLE",
+  wfEntityAction: "CREATE",
   enabled: "true",
   description: "",
   wfType: "AA",
@@ -93,9 +108,10 @@ module.exports.validObject2 = {
 };
 
 
-module.exports.validObject3 = {
+module.exports.validObject4 = {
+  tenantId: "IVL",
   wfEntity: "ROLE",
-  wfEntityAction: "CREATE",
+  wfEntityAction: "AMEND",
   enabled: "true",
   description: "",
   wfType: "AA",
