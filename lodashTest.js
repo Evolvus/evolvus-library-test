@@ -153,3 +153,42 @@ it("should return list of extra attributes", () => {
   expect(result, "Must be missing attributes")
     .to.be.deep.equal(["*enabled"]);
 });
+
+it("should return the word 'true'", () => {
+  var testObject = {
+    "user": "abc",
+    "value": 50
+  };
+  var testTemplate = "<%-value.value == 20 || value.user == 'abc'%>";
+  var compiled = _.template(testTemplate);
+  var result = compiled({
+    "value": testObject
+  });
+  debug("result is: " + JSON.stringify(result));
+  expect(result)
+    .to.be.eql("true");
+});
+
+it("should lower case the string", () => {
+  var testObject = "user-Role";
+  var result = _.kebabCase(_.lowerCase(testObject));
+  debug("result is: " + JSON.stringify(result));
+  expect(result)
+    .to.be.eql("user-role");
+});
+
+it("should lower case the string", () => {
+  var testObject = "user-Role";
+  var result = testObject.toLowerCase();
+  debug("result is: " + JSON.stringify(result));
+  expect(result)
+    .to.be.eql("user-role");
+});
+
+it("should initcap the string", () => {
+  var testObject = "user-role";
+  var result = _.upperFirst(testObject);
+  debug("result is: " + JSON.stringify(result));
+  expect(result)
+    .to.be.eql("UserRole");
+});

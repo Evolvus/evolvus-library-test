@@ -33,7 +33,7 @@ module.exports = (grunt) => {
     },
     watch: {
       files: ["<%= jshint.files.src %>"],
-      tasks: ["jshint", "mochaTest"]
+      tasks: ["jshint", "env:test", "mochaTest"]
     }
   });
 
