@@ -159,3 +159,256 @@ it("should find null on searching by invalid attribute", (done) => {
       done();
     });
 });
+
+// find returns an empty array for no data found unlike findOne
+it("should find null on searching by invalid attribute", (done) => {
+  var tenantId = "IVL";
+  var filter = { // invalid filter column
+    "XYZ": "1"
+  };
+  var orderby = {
+    "createdDate": 1
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.be.empty;
+      done();
+    });
+});
+
+it("should return [4] on searching by valid parameters", (done) => {
+  var tenantId = "IVL"; // invalid tenant
+  var filter = {
+    "createdBy": "SYSTEM"
+  };
+  var orderby = {
+    "createdDate": 1
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(4);
+      done();
+    });
+});
+
+
+it("should return [2] on searching by valid parameters", (done) => {
+  var tenantId = "IVL"; // invalid tenant
+  var filter = {
+    "createdBy": "SYSTEM",
+    "wfEntityAction": "AMEND"
+  };
+  var orderby = {
+    "createdDate": 1
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(2);
+      done();
+    });
+});
+
+//should return ROLE when ordered by ENTITY
+it("should return [ROLE] on ordering by wfEntity asc", (done) => {
+  var tenantId = "IVL"; // invalid tenant
+  var filter = {
+    "createdBy": "SYSTEM",
+    "wfEntityAction": "AMEND"
+  };
+  var orderby = {
+    "wfEntity": 1
+  };
+  var skipCount = 0;
+  var limit = 1;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result[0].wfEntity)
+        .to.eql("ROLE");
+      done();
+    });
+});
+
+//should return USER when ordered by ENTITY desc
+it("should return [USER] on ordering by wfEntity desc", (done) => {
+  var tenantId = "IVL"; // invalid tenant
+  var filter = {
+    "createdBy": "SYSTEM",
+    "wfEntityAction": "AMEND"
+  };
+  var orderby = {
+    "wfEntity": -1
+  };
+  var skipCount = 0;
+  var limit = 1;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result[0].wfEntity)
+        .to.eql("USER");
+      done();
+    });
+});
+
+it("should return [3] on skiping 1 results", (done) => {
+  var tenantId = "IVL"; // invalid tenant
+  var filter = {
+    "createdBy": "SYSTEM"
+  };
+  var orderby = {
+    "createdDate": 1
+  };
+  var skipCount = 1;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(3);
+      done();
+    });
+});
+
+it("should return [] on skiping 5 results", (done) => {
+  var tenantId = "IVL"; // invalid tenant
+  var filter = {
+    "createdBy": "SYSTEM"
+  };
+  var orderby = {
+    "createdDate": 1
+  };
+  var skipCount = 5;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(0);
+      done();
+    });
+});
+
+it("should return [4] even though orderby attribute is invalid", (done) => {
+  var tenantId = "IVL"; // valid tenant
+  var filter = { // valid filter
+    "createdBy": "SYSTEM"
+  };
+  var orderby = { //invalid orderby attribute
+    "createdDate1": 1
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(4);
+      done();
+    });
+});
+
+
+it("should return [4] even though there is an empty orderby attribute", (done) => {
+  var tenantId = "IVL"; // valid tenant
+  var filter = { // valid filter
+    "createdBy": "SYSTEM"
+  };
+  var orderby = { // null valid orderby attribute
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(4);
+      done();
+    });
+});
+
+it("should return [4] even though there is a empty orderby/filter attribute", (done) => {
+  var tenantId = "IVL"; // valid tenant
+  var filter = { // empty filter
+  };
+  var orderby = { // empty orderby attribute
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(4);
+      done();
+    });
+});
+
+it("should return [4] even though there is a null filter attribute", (done) => {
+  var tenantId = "IVL"; // valid tenant
+  var filter = null; // null filter
+  var orderby = { // empty orderby attribute
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(4);
+      done();
+    });
+});
+
+it("should return [4] even though there is a undefined filter attribute", (done) => {
+  var tenantId = "IVL"; // valid tenant
+  var filter; // null filter
+  var orderby = { // empty orderby attribute
+  };
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(4);
+      done();
+    });
+});
+
+it("should return [4] even though there is a undefined filter/orderby attribute", (done) => {
+  var tenantId = "IVL"; // valid tenant
+  var filter; // undefined filter
+  var orderby; // undefined orderby attribute
+  var skipCount = 0;
+  var limit = 0;
+  testData.find(tenantId, filter, orderby, skipCount, limit)
+    .then((result) => {
+      debug("result is: " + JSON.stringify(result));
+      expect(result)
+        .to.be.an('array')
+        .and.have.length(4);
+      done();
+    });
+});
